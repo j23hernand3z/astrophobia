@@ -1,9 +1,10 @@
+
 :root {
   --aside-width: 400px;
   --cart-aside-summary-height-with-discount: 300px;
   --cart-aside-summary-height: 250px;
   --grid-item-width: 355px;
-  --header-height: 64px;
+  --header-height: 164px;
   --color-dark: #000;
   --color-light: #fff;
 }
@@ -129,7 +130,7 @@ aside li {
 */
 .header {
   align-items: center;
-  background: #fff;
+  background: #000000;
   display: flex;
   height: var(--header-height);
   padding: 0 1rem;
@@ -421,6 +422,10 @@ aside li {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.75rem;
+  color: #CECECE;
+  background-color: #6428a178;
+  border: 0.3rem solid #D2B9EC;
+  border-radius: 2rem;
 }
 
 .product-options-item {

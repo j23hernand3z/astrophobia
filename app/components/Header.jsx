@@ -1,6 +1,7 @@
 import {Await, NavLink} from '@remix-run/react';
 import {Suspense} from 'react';
 import {useRootLoaderData} from '~/root';
+import logo from '../images/logo.png'
 
 /**
  * @param {HeaderProps}
@@ -10,7 +11,8 @@ export function Header({header, isLoggedIn, cart}) {
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
+      <img src={logo} alt="Astrophobia Logo" width="30%"/>
+        {/* <strong>{shop.name}</strong> */}
       </NavLink>
       <HeaderMenu
         menu={menu}
