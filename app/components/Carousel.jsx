@@ -1,13 +1,39 @@
-import Swiper from 'swiper/bundle';
 
-// import styles bundle
-import 'swiper/css/bundle';
+/**
+ * @param {LoaderFunctionArgs}
+ */
+export async function loader({request, params, context}) {
+  const {handle} = params;
+  const {storefront} = context;
+  const paginationVariables = getPaginationVariables(request, {
+    pageBy: 8,
+  });
 
+  if (!handle) {
+    return redirect('/collections');
+  }
 
-export function Carousel({Product}) {
+  const {collection} = await storefront.query(COLLECTION_QUERY, {
+    variables: {handle, ...paginationVariables},
+  });
+
+  if (!collection) {
+    throw new Response(`Collection ${handle} not found`, {
+      status: 404,
+    });
+  }
+  return json({collection});
+}
+
+export default function Carousel() {
+  /** @type {LoaderReturnData} */
+  const {collection} = useLoaderData();
+
   return (
     
-    <><section class="carousel" aria-label="Gallery">
+    <>      <h1>{collection.title}</h1>
+
+    <section class="carousel" aria-label="Gallery">
       <ol class="carousel__viewport">
         <li id="carousel__slide1"
           tabindex="0"
@@ -71,3 +97,22 @@ export function Carousel({Product}) {
 
   );
 }
+
+
+const COLLECTION_QUERY = `#graphql
+  ${PRODUCT_ITEM_FRAGMENT}
+  query {
+    collections(first: 5) {
+      edges {
+        node {
+          id
+          title
+          handle
+          updatedAt
+          productsCount
+          sortOrder
+        }
+      }
+    }
+  }
+`;
