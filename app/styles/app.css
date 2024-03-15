@@ -7,6 +7,14 @@
   --header-height: 164px;
   --color-dark: #000;
   --color-light: #fff;
+  --lightpurple: #D2b9ec;
+  --darkpurple: #642ba1;
+  --lightpink: #f5b7f6;
+  --darkpink: #bd1cb4;
+  --lightteal: #33a098;
+  --darkteal: #29b1a6;
+  --lightgray: #8f8aac;
+  --darkgray: #272437;
 }
 
 body{
@@ -422,7 +430,7 @@ aside li {
 
 .product-price-on-sale {
   display: flex;
-  grid-gap: 0.5rem;
+  grid-gap:0.5em;
 }
 
 .product-price-on-sale s {
@@ -442,7 +450,13 @@ aside li {
 .product-options-item {
   padding: 0.25rem 0.5rem;
 }
+form button{
+  font-size: large;
+  color: var(--lightpink);
+  background-color: var(--darkpurple);
+  border-radius: 15px;
 
+}
 /*
 * --------------------------------------------------
 * routes/blog._index.tsx
