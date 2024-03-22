@@ -147,9 +147,15 @@ aside li {
 * components/Header
 * --------------------------------------------------
 */
+
+.active img {
+  margin-left: 550px;
+}
+
 .header {
   align-items: center;
   background: #000000;
+  
   display: flex;
   height: var(--header-height);
   padding: 0 1rem;
@@ -157,6 +163,12 @@ aside li {
   top: 0;
   z-index: 1;
 }
+
+.header a {
+  color: white;
+}
+
+
 
 .header-menu-mobile-toggle {
   @media (min-width: 48em) {
@@ -178,10 +190,12 @@ aside li {
     grid-gap: 1rem;
     margin-left: 3rem;
   }
+  color: white;
 }
 
 .header-menu-item {
   cursor: pointer;
+  
 }
 
 .header-ctas {
@@ -343,11 +357,12 @@ aside li {
 
 .recommended-products-grid {
   display: grid;
-  grid-gap: 1.5rem;
+  grid-gap: 2.5rem;
   grid-template-columns: repeat(2, 1fr);
   @media (min-width: 45em) {
     grid-template-columns: repeat(4, 1fr);
   }
+  margin-left: 455px;
 }
 
 .recommended-product img {
@@ -443,10 +458,11 @@ aside li {
 .product-price{
   color: white;
   text-align: right;
+
+  display: flex;
+  grid-gap:0.5em;
 }
-.product-price-on-sale s {
-  opacity: 0.5;
-}
+
 
 .product-options-grid {
   display: inline;
@@ -467,8 +483,14 @@ form button{
   color: var(--lightpink);
   background-color: var(--darkpurple);
   border-radius: 15px;
+
   float: right;
 }
+
+
+/*
+* THERE MIGHT BE AN ERROR HERE 
+*/
 div span{
   color: white;
 }
@@ -476,6 +498,8 @@ div span{
   float: right;
 }
 
+
+}
 /*
 * --------------------------------------------------
 * routes/blog._index.tsx
