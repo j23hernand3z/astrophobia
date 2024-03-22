@@ -1,73 +1,53 @@
-import Swiper from 'swiper/bundle';
+import { useLoaderData, Link } from '@remix-run/react';
+import { Image} from '@shopify/hydrogen';
 
-// import styles bundle
-import 'swiper/css/bundle';
+export function Carousel({ collections }) {
+ // Assuming collections is an array of collections fetched from your GraphQL query
+ // and each collection is an object with properties like id, title, handle, etc.
 
-
-export function Carousel({Product}) {
-  return (
-    
-    <><section class="carousel" aria-label="Gallery">
+ return (
+    <section class="carousel" aria-label="Gallery">
       <ol class="carousel__viewport">
-        <li id="carousel__slide1"
-          tabindex="0"
-          class="carousel__slide">
-          <div class="carousel__snapper">
-            <a href="#carousel__slide4"
-              class="carousel__prev">Go to last slide</a>
-            <a href="#carousel__slide2"
-              class="carousel__next">Go to next slide</a>
-          </div>
-        </li>
-        <li id="carousel__slide2"
-          tabindex="0"
-          class="carousel__slide">
-          <div class="carousel__snapper"></div>
-          <a href="#carousel__slide1"
-            class="carousel__prev">Go to previous slide</a>
-          <a href="#carousel__slide3"
-            class="carousel__next">Go to next slide</a>
-        </li>
-        <li id="carousel__slide3"
-          tabindex="0"
-          class="carousel__slide">
-          <div class="carousel__snapper"></div>
-          <a href="#carousel__slide2"
-            class="carousel__prev">Go to previous slide</a>
-          <a href="#carousel__slide4"
-            class="carousel__next">Go to next slide</a>
-        </li>
-        <li id="carousel__slide4"
-          tabindex="0"
-          class="carousel__slide">
-          <div class="carousel__snapper"></div>
-          <a href="#carousel__slide3"
-            class="carousel__prev">Go to previous slide</a>
-          <a href="#carousel__slide1"
-            class="carousel__next">Go to first slide</a>
-        </li>
+        {collections.map((collection, index) => (
+          <li key={collection.id} id={`carousel__slide${index + 1}`} tabindex="0" class="carousel__slide">
+            <div className="collections-grid">
+              <CollectionItem collection={collection} index={index} />
+            </div>
+            <div class="carousel__snapper"></div>
+            <a href={`#carousel__slide${index === 0 ? collections.length : index}`} class="carousel__prev">Go to previous slide</a>
+            <a href={`#carousel__slide${index === collections.length - 1 ? 1 : index + 2}`} class="carousel__next">Go to next slide</a>
+          </li>
+        ))}
       </ol>
       <aside class="carousel__navigation">
         <ol class="carousel__navigation-list">
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide1"
-              class="carousel__navigation-button">Go to slide 1</a>
-          </li>
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide2"
-              class="carousel__navigation-button">Go to slide 2</a>
-          </li>
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide3"
-              class="carousel__navigation-button">Go to slide 3</a>
-          </li>
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide4"
-              class="carousel__navigation-button">Go to slide 4</a>
-          </li>
+          {collections.map((_, index) => (
+            <li key={index} class="carousel__navigation-item">
+              <a href={`#carousel__slide${index + 1}`} class="carousel__navigation-button">Go to slide {index + 1}</a>
+            </li>
+          ))}
         </ol>
       </aside>
-    </section><p>TEST</p></>
+    </section>
+ );
+}
 
-  );
+function CollectionItem({ collection, index }) {
+ return (
+    <Link
+      className="collection-item"
+      key={collection.id}
+      to={`/collections/${collection.handle}`}
+      prefetch="intent"
+    >
+      <h5>{collection.title}</h5>
+
+        <Image
+          // alt={collection.image.altText || collection.title}
+          aspectRatio="1/1"
+          data={collection.image}
+          loading={index < 3 ? 'eager' : undefined}
+        />
+    </Link>
+ );
 }
