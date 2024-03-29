@@ -17,13 +17,6 @@
   --darkgray: #272437;
 }
 
-body{
-  background-color: #000;
-  background-image: url('../images/background.gif');
-  background-size: cover;
-  background-position: center;
-}
-
 a{
   color: #fff;
 }
