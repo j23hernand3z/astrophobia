@@ -18,7 +18,7 @@ export function Carousel({ collections }) {
             <a href={`#carousel__slide${index === collections.length - 1 ? 1 : index + 2}`} class="carousel__next">Go to next slide</a>
           </li>
         ))}
-      </ol>
+        </ol>
       <aside class="carousel__navigation">
         <ol class="carousel__navigation-list">
           {collections.map((_, index) => (
@@ -26,7 +26,7 @@ export function Carousel({ collections }) {
               <a href={`#carousel__slide${index + 1}`} class="carousel__navigation-button">Go to slide {index + 1}</a>
             </li>
           ))}
-        </ol>
+           </ol>
       </aside>
     </section>
  );
