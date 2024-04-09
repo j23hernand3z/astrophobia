@@ -149,7 +149,7 @@ aside li {
 */
 
 .active img {
-  margin-left: 550px;
+  margin-left: 600px;
 }
 
 .header {
@@ -188,7 +188,7 @@ aside li {
   @media (min-width: 45em) {
     display: flex;
     grid-gap: 1rem;
-    margin-left: 3rem;
+    margin-right: 1rem;
   }
   color: white;
 }
@@ -250,12 +250,24 @@ aside li {
 .cart-line {
   display: flex;
   padding: 0.75rem 0;
+  background: #3A2753;
+  border-radius: 15px;
+  color: white;
+  object-fit: fill;
 }
 
-.cart-line img {
+.cart-line img{
   height: 100%;
-  display: block;
-  margin-right: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.cart-line a {
+  color: white;
+}
+
+.cart-line-quantiy {
+  height: 100%;
+  
 }
 
 .cart-summary-page {
@@ -264,27 +276,28 @@ aside li {
 
 .cart-summary-aside {
   background: white;
-  border-top: 1px solid var(--color-dark);
+  border-top: 1px solid var(--color-light);
   bottom: 0;
   padding-top: 0.75rem;
   position: absolute;
   width: calc(var(--aside-width) - 40px);
 }
 
+
 .cart-line-quantiy {
   display: flex;
+  position: absolute;
+  
 }
 
-.cart-discount {
-  align-items: center;
-  display: flex;
-  margin-top: 0.25rem;
+.cart-line-quantiy button {
+  background:#D2B9EC;
+  border-radius: 5px;
+  border: white;
 }
 
-.cart-subtotal {
-  align-items: center;
-  display: flex;
-}
+
+
 /*
 * --------------------------------------------------
 * components/Search
@@ -546,6 +559,7 @@ div span{
 }
 
 
+
 /*
 * --------------------------------------------------
 * Carousel
@@ -781,3 +795,4 @@ ol, li {
 .carousel::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
 }
+
