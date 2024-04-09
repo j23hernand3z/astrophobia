@@ -1,149 +1,191 @@
-import {defer} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link} from '@remix-run/react';
-import {Suspense} from 'react';
-import {Image, Money} from '@shopify/hydrogen';
+import {json, redirect} from '@shopify/remix-oxygen';
+import {useLoaderData, Link} from '@remix-run/react';
+import {
+  Pagination,
+  getPaginationVariables,
+  Image,
+  Money,
+} from '@shopify/hydrogen';
+import {useVariantUrl} from '~/lib/variants';
 
 /**
- * @type {MetaFunction}
+ * @type {MetaFunction<typeof loader>}
  */
-export const meta = () => {
-  return [{title: 'Hydrogen | Home'}];
+export const meta = ({data}) => {
+  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
 };
 
 /**
  * @param {LoaderFunctionArgs}
  */
-export async function loader({context}) {
+export async function loader({request, params, context}) {
+  const {handle} = params;
   const {storefront} = context;
-  const {collections} = await storefront.query(FEATURED_COLLECTION_QUERY);
-  const featuredCollection = collections.nodes[0];
-  const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
+  const paginationVariables = getPaginationVariables(request, {
+    pageBy: 8,
+  });
 
-  return defer({featuredCollection, recommendedProducts});
+  if (!handle) {
+    return redirect('/collections');
+  }
+
+  const {collection} = await storefront.query(COLLECTION_QUERY, {
+    variables: {handle, ...paginationVariables},
+  });
+
+  if (!collection) {
+    throw new Response(`Collection ${handle} not found`, {
+      status: 404,
+    });
+  }
+  return json({collection});
 }
 
-export default function Homepage() {
+export default function Collection() {
   /** @type {LoaderReturnData} */
-  const data = useLoaderData();
+  const {collection} = useLoaderData();
+
   return (
-    <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+    <div className="collection">
+      <h1>{collection.title}</h1>
+      <p className="collection-description">{collection.description}</p>
+      <Pagination connection={collection.products}>
+        {({nodes, isLoading, PreviousLink, NextLink}) => (
+          <>
+            <PreviousLink>
+              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+            </PreviousLink>
+            <ProductsGrid products={nodes} />
+            <br />
+            <NextLink>
+              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+            </NextLink>
+          </>
+        )}
+      </Pagination>
+    </div>
+  );
+}
+
+/**
+ * @param {{products: ProductItemFragment[]}}
+ */
+function ProductsGrid({products}) {
+  return (
+    <div className="products-grid">
+      {products.map((product, index) => {
+        return (
+          <ProductItem
+            key={product.id}
+            product={product}
+            loading={index < 8 ? 'eager' : undefined}
+          />
+        );
+      })}
     </div>
   );
 }
 
 /**
  * @param {{
- *   collection: FeaturedCollectionFragment;
+ *   product: ProductItemFragment;
+ *   loading?: 'eager' | 'lazy';
  * }}
  */
-function FeaturedCollection({collection}) {
-  if (!collection) return null;
-  const image = collection?.image;
+function ProductItem({product, loading}) {
+  const variant = product.variants.nodes[0];
+  const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
     <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
+      className="product-item"
+      key={product.id}
+      prefetch="intent"
+      to={variantUrl}
     >
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
-        </div>
+      {product.featuredImage && (
+        <Image
+          alt={product.featuredImage.altText || product.title}
+          aspectRatio="1/1"
+          data={product.featuredImage}
+          loading={loading}
+          sizes="(min-width: 45em) 400px, 100vw"
+        />
       )}
-      <h1>{collection.title}</h1>
+      <h4>{product.title}</h4>
+      <small>
+        <Money data={product.priceRange.minVariantPrice} />
+      </small>
     </Link>
   );
 }
 
-/**
- * @param {{
- *   products: Promise<RecommendedProductsQuery>;
- * }}
- */
-function RecommendedProducts({products}) {
-  return (
-    <div className="recommended-products">
-      <h2>Recommended Products</h2>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={products}>
-          {({products}) => (
-            <div className="recommended-products-grid">
-              {products.nodes.map((product) => (
-                <Link
-                  key={product.id}
-                  className="recommended-product"
-                  to={`/products/${product.handle}`}
-                >
-                  <Image
-                    data={product.images.nodes[0]}
-                    aspectRatio="1/1"
-                    sizes="(min-width: 45em) 20vw, 50vw"
-                  />
-                  <h4>{product.title}</h4>
-                  <small>
-                    <Money data={product.priceRange.minVariantPrice} />
-                  </small>
-                </Link>
-              ))}
-            </div>
-          )}
-        </Await>
-      </Suspense>
-      <br />
-    </div>
-  );
-}
-
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
+const PRODUCT_ITEM_FRAGMENT = `#graphql
+  fragment MoneyProductItem on MoneyV2 {
+    amount
+    currencyCode
+  }
+  fragment ProductItem on Product {
     id
+    handle
     title
-    image {
+    featuredImage {
       id
-      url
       altText
+      url
       width
       height
     }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
+    priceRange {
+      minVariantPrice {
+        ...MoneyProductItem
+      }
+      maxVariantPrice {
+        ...MoneyProductItem
+      }
+    }
+    variants(first: 1) {
       nodes {
-        ...FeaturedCollection
+        selectedOptions {
+          name
+          value
+        }
       }
     }
   }
 `;
 
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
-    title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    images(first: 1) {
-      nodes {
-        id
-        url
-        altText
-        width
-        height
-      }
-    }
-  }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...RecommendedProduct
+// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection
+const COLLECTION_QUERY = `#graphql
+  ${PRODUCT_ITEM_FRAGMENT}
+  query Collection(
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+  ) @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      products(
+        first: $first,
+        last: $last,
+        before: $startCursor,
+        after: $endCursor
+      ) {
+        nodes {
+          ...ProductItem
+        }
+        pageInfo {
+          hasPreviousPage
+          hasNextPage
+          endCursor
+          startCursor
+        }
       }
     }
   }
@@ -151,6 +193,5 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
 
 /** @typedef {import('@shopify/remix-oxygen').LoaderFunctionArgs} LoaderFunctionArgs */
 /** @template T @typedef {import('@remix-run/react').MetaFunction<T>} MetaFunction */
-/** @typedef {import('storefrontapi.generated').FeaturedCollectionFragment} FeaturedCollectionFragment */
-/** @typedef {import('storefrontapi.generated').RecommendedProductsQuery} RecommendedProductsQuery */
+/** @typedef {import('storefrontapi.generated').ProductItemFragment} ProductItemFragment */
 /** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */

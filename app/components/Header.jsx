@@ -54,6 +54,7 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
         >
           Home
         </NavLink>
+        
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
@@ -98,6 +99,7 @@ function HeaderCtas({isLoggedIn, cart}) {
         </Suspense>
       </NavLink>
       <SearchToggle />
+      
       <CartToggle cart={cart} />
     </nav>
   );
@@ -119,7 +121,8 @@ function SearchToggle() {
  * @param {{count: number}}
  */
 function CartBadge({count}) {
-  return <a href="#cart-aside">Cart {count}</a>;
+  return <NavLink  to="/cart" >
+  🛒 {count}</NavLink>;
 }
 
 /**
