@@ -153,9 +153,7 @@ aside li {
 }
 
 .header {
-  align-items: center;
-  background: #000000;
-  
+  align-items: center;  
   display: flex;
   height: var(--header-height);
   padding: 0 1rem;
@@ -671,12 +669,8 @@ ol, li {
   position: relative;
   flex: 0 0 100%;
   width: 100%;
-  background-color: #f99;
+  background-color: transparent;
   counter-increment: item;
-}
-
-.carousel__slide:nth-child(even) {
-  background-color: #f99;
 }
 
 .carousel__slide:before {

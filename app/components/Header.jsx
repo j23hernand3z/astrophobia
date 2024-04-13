@@ -52,7 +52,7 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
           style={activeLinkStyle}
           to="/"
         >
-          Home
+          
         </NavLink>
         
       )}
@@ -76,7 +76,7 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
             style={activeLinkStyle}
             to={url}
           >
-            {item.title}
+            {/* {item.title} */}
           </NavLink>
         );
       })}
@@ -91,13 +91,13 @@ function HeaderCtas({isLoggedIn, cart}) {
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
+      {/* <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
         <Suspense fallback="Sign in">
           <Await resolve={isLoggedIn} errorElement="Sign in">
             {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
           </Await>
         </Suspense>
-      </NavLink>
+      </NavLink> */}
       <SearchToggle />
       
       <CartToggle cart={cart} />
@@ -114,7 +114,7 @@ function HeaderMenuMobileToggle() {
 }
 
 function SearchToggle() {
-  return <a href="#search-aside">Search</a>;
+  return <a href="#search-aside">🔍</a>;
 }
 
 /**
