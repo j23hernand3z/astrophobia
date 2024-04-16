@@ -15,7 +15,7 @@ import {getVariantUrl} from '~/lib/variants';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.product.title ?? ''}`}];
+  return [{title: `Astrophobia | ${data?.product.title ?? ''}`}];
 };
 
 /**
@@ -113,7 +113,7 @@ export default function Product() {
         selectedVariant={selectedVariant}
         product={product}
         variants={variants}
-      />
+      />  
     </div>
   );
 }
@@ -233,8 +233,11 @@ function ProductForm({product, selectedVariant, variants}) {
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
-          window.location.href = window.location.href + '#cart-aside';
+          // window.location.href = window.location.href + '#success';
+          // SUCESSFULLY ADDED TO CART!
+          alert("Sucessfully added to cart!")
         }}
+      
         lines={
           selectedVariant
             ? [
@@ -270,7 +273,9 @@ function ProductOptions({option}) {
               replace
               to={to}
               style={{
-                border: isActive ? '1px solid black' : '1px solid transparent',
+                backdropFilter: isActive ? 'blur(50px)' : 'none',
+                backgroundColor: isActive ? 'rgba(210,185,236,.53)' : 'transparent',
+                border: isActive ? '1px solid transparent' : '1px solid transparent',
                 opacity: isAvailable ? 1 : 0.3,
               }}
             >
@@ -283,6 +288,8 @@ function ProductOptions({option}) {
     </div>
   );
 }
+
+
 
 /**
  * @param {{

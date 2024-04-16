@@ -80,6 +80,7 @@ function CartLineItem({layout, line}) {
           height={100}
           loading="lazy"
           width={100}
+
         />
       )}
 
