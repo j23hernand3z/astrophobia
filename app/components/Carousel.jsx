@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from '@remix-run/react';
+import { Link } from '@remix-run/react';
 import { Image} from '@shopify/hydrogen';
 
 export function Carousel({ collections }) {
