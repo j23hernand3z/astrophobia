@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from '@remix-run/react';
+import { Link } from '@remix-run/react';
 import { Image} from '@shopify/hydrogen';
 
 export function Carousel({ collections }) {
@@ -13,12 +13,12 @@ export function Carousel({ collections }) {
             <div className="collections-grid">
               <CollectionItem collection={collection} index={index} />
             </div>
-            <div class="carousel__snapper"></div>
+            {/* <div class="carousel__snapper"></div> */}
             <a href={`#carousel__slide${index === 0 ? collections.length : index}`} class="carousel__prev">Go to previous slide</a>
             <a href={`#carousel__slide${index === collections.length - 1 ? 1 : index + 2}`} class="carousel__next">Go to next slide</a>
           </li>
         ))}
-      </ol>
+        </ol>
       <aside class="carousel__navigation">
         <ol class="carousel__navigation-list">
           {collections.map((_, index) => (
@@ -26,7 +26,7 @@ export function Carousel({ collections }) {
               <a href={`#carousel__slide${index + 1}`} class="carousel__navigation-button">Go to slide {index + 1}</a>
             </li>
           ))}
-        </ol>
+           </ol>
       </aside>
     </section>
  );
@@ -38,6 +38,7 @@ function CollectionItem({ collection, index }) {
       className="collection-item"
       key={collection.id}
       to={`/collections/${collection.handle}`}
+      
       prefetch="intent"
     >
       <h5>{collection.title}</h5>
@@ -49,5 +50,6 @@ function CollectionItem({ collection, index }) {
           loading={index < 3 ? 'eager' : undefined}
         />
     </Link>
+    
  );
 }
