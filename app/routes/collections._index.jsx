@@ -33,7 +33,9 @@ export default function Collections() {
               {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
             </PreviousLink>
             {/* <CollectionsGrid collections={nodes} /> */}
+            <div class="collection-wrapper">
             <Carousel collections={nodes}/>
+            </div>
             <NextLink>
               {isLoading ? 'Loading...' : <span>Load more ↓</span>}
             </NextLink>
