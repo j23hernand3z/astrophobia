@@ -52,8 +52,9 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
           style={activeLinkStyle}
           to="/"
         >
-          Home
+          
         </NavLink>
+        
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
@@ -75,7 +76,7 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
             style={activeLinkStyle}
             to={url}
           >
-            {item.title}
+            {/* {item.title} */}
           </NavLink>
         );
       })}
@@ -90,14 +91,15 @@ function HeaderCtas({isLoggedIn, cart}) {
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
+      {/* <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
         <Suspense fallback="Sign in">
           <Await resolve={isLoggedIn} errorElement="Sign in">
             {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
           </Await>
         </Suspense>
-      </NavLink>
+      </NavLink> */}
       <SearchToggle />
+      
       <CartToggle cart={cart} />
     </nav>
   );
@@ -112,14 +114,15 @@ function HeaderMenuMobileToggle() {
 }
 
 function SearchToggle() {
-  return <a href="#search-aside">Search</a>;
+  return <a href="#search-aside">🔍</a>;
 }
 
 /**
  * @param {{count: number}}
  */
 function CartBadge({count}) {
-  return <a href="#cart-aside">Cart {count}</a>;
+  return <NavLink  to="/cart" >
+  🛒 {count}</NavLink>;
 }
 
 /**
@@ -189,7 +192,7 @@ const FALLBACK_HEADER_MENU = {
 function activeLinkStyle({isActive, isPending}) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'black',
+    color: isPending ? 'grey' : 'white',
   };
 }
 
