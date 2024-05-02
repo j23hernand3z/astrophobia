@@ -311,6 +311,7 @@ aside li {
 .cart-subtotal{
   color: white;
   font-size: 150%;
+  margin-bottom: 3rem;
 }
 
 .cart-line-quantiy {
