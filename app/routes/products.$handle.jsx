@@ -176,12 +176,14 @@ function ProductMain({selectedVariant, product, variants}) {
       </Suspense>
       <br />
       <br />
+      <div class="description">
       <p>
         <strong>Description</strong>
       </p>
       <br />
       <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
       <br />
+    </div>
     </div>
   );
 }

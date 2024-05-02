@@ -11,7 +11,7 @@ export function Header({header, isLoggedIn, cart}) {
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-      <img src={logo} alt="Astrophobia Logo" width="30%"/>
+      <img src={logo} alt="Astrophobia Logo"/>
         {/* <strong>{shop.name}</strong> */}
       </NavLink>
       <HeaderMenu
@@ -108,7 +108,7 @@ function HeaderCtas({isLoggedIn, cart}) {
 function HeaderMenuMobileToggle() {
   return (
     <a className="header-menu-mobile-toggle" href="#mobile-menu-aside">
-      <h3>☰</h3>
+      <h3></h3>
     </a>
   );
 }

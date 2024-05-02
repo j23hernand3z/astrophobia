@@ -84,7 +84,7 @@ function CartLineItem({layout, line}) {
         />
       )}
 
-      <div>
+      <div class="cart-item-decription">
         <Link
           prefetch="intent"
           to={lineItemUrl}
@@ -124,7 +124,7 @@ function CartCheckoutActions({checkoutUrl}) {
   return (
     <div>
       <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+        <p class="checkout">Continue to Checkout &rarr;</p>
       </a>
       <br />
     </div>
@@ -187,6 +187,7 @@ function CartLineQuantity({line}) {
   return (
     <div className="cart-line-quantiy">
       <small>Quantity: {quantity} &nbsp;&nbsp;</small>
+      <div class="cart-button">
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
           aria-label="Decrease quantity"
@@ -209,6 +210,7 @@ function CartLineQuantity({line}) {
       </CartLineUpdateButton>
       &nbsp;
       <CartLineRemoveButton lineIds={[lineId]} />
+      </div>
     </div>
   );
 }
@@ -298,9 +300,11 @@ function CartDiscounts({discountCodes}) {
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
         <div>
+          <p>Discount Code:
+        </p>
           <input type="text" name="discountCode" placeholder="Discount code" />
           &nbsp;
-          <button type="submit">Apply</button>
+          <button type="submit" class="checkout-apply">Apply</button>
         </div>
       </UpdateDiscountForm>
     </div>
